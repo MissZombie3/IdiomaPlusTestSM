@@ -7,6 +7,12 @@ public class SceneLoaderManager : MonoBehaviour
     public static SceneLoaderManager instance;
     private string pendingScene;
 
+    public float LoadPct
+    {
+        get;
+        private set;
+    }
+
     private void Awake()
     {
         if (instance == null)
@@ -23,6 +29,7 @@ public class SceneLoaderManager : MonoBehaviour
     
     public void LoadScene(string sceneName)
     {
+        LoadPct = 0;
         this.pendingScene = sceneName;
         SceneManager.LoadScene("LoadingScene");
     }
@@ -44,6 +51,7 @@ public class SceneLoaderManager : MonoBehaviour
 
         while (!asyncLoad.isDone)
         {
+            LoadPct = asyncLoad.progress;
             yield return null;
         }
     }
