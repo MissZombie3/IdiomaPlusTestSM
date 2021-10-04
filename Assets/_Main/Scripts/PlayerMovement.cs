@@ -9,27 +9,28 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravity = 9.8f;
     [SerializeField] private float fallVelocity;
     [SerializeField] private float jumpForce;
-    [SerializeField] private CharacterController player;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private Animator playerAnimatorController;
 
+    private CharacterController player;
     private float horizontalmove;
     private float verticalmove;
     private Vector3 playerInput;
     private Vector3 playerMove;
     private Vector3 cameraForward;
     private Vector3 cameraRight;
-
+    private Health health;
 
     private void Start()
     {
         player = GetComponent<CharacterController>();
+        health = GetComponent<Health>();
     }
 
     private void Update()
     {
-        horizontalmove = Input.GetAxis("Horizontal");
-        verticalmove = Input.GetAxis("Vertical");
+        horizontalmove = health.IsDead? 0 : Input.GetAxis("Horizontal");
+        verticalmove = health.IsDead ? 0 : Input.GetAxis("Vertical");
 
         playerInput = new Vector3(horizontalmove, 0, verticalmove);
         playerInput = Vector3.ClampMagnitude(playerInput, 1);
