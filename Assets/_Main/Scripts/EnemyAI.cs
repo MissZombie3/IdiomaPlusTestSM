@@ -18,6 +18,7 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float stopChaseRange;
     [SerializeField] private float attackRange;
     [SerializeField] private float stopAttackRange;
+    [SerializeField] private float damping = 10;
 
     private NavMeshAgent agent;
     private int currentPoint;
@@ -82,9 +83,15 @@ public class EnemyAI : MonoBehaviour
 
     private void Attack()
     {
+        var lookPos = playerTransform.position - transform.position;
+        lookPos.y = 0;
+        var rotation = Quaternion.LookRotation(lookPos);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
+
         if (Vector3.Distance(playerTransform.position, transform.position) > stopAttackRange)
             currentState = EnemyState.Chase;
     }
+
 
     private void OnDrawGizmosSelected()
     {

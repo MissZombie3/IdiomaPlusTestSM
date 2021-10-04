@@ -9,9 +9,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravity = 9.8f;
     [SerializeField] private float fallVelocity;
     [SerializeField] private float jumpForce;
-    [SerializeField] private Camera mainCamera;
     [SerializeField] private Animator playerAnimatorController;
+    [SerializeField] private float damping = 1;
 
+    private Camera mainCamera;
     private CharacterController player;
     private float horizontalmove;
     private float verticalmove;
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     {
         player = GetComponent<CharacterController>();
         health = GetComponent<Health>();
+        mainCamera = Camera.main;
     }
 
     private void Update()
@@ -40,10 +42,18 @@ public class PlayerMovement : MonoBehaviour
 
         playerMove = playerInput.x * cameraRight + playerInput.z * cameraForward;
         playerMove = playerMove * playerSpeed;
-        player.transform.LookAt(player.transform.position + playerMove);
-        
+
+        if (playerInput.magnitude != 0)
+        {
+            Vector3 targetPos = (transform.position + playerMove);
+            Vector3 lookDirection = targetPos - transform.position;
+            lookDirection.y = 0;
+            Quaternion lookRotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * damping);
+        }
+
         SetGravity();
-        TrySetJump();
+        //TrySetJump();
 
         player.Move(playerMove * Time.deltaTime);
         playerAnimatorController.SetBool("isGrounded", player.isGrounded);

@@ -14,6 +14,10 @@ public class Health : MonoBehaviour
     {
         get { return currentHealth <= 0;}
     }
+    public int CurrentHealth 
+    {
+        get { return currentHealth;}
+    }
 
     private void Awake()
     {
