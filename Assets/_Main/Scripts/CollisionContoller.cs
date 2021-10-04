@@ -17,7 +17,6 @@ public class CollisionContoller : MonoBehaviour
             return;
 
         Vector3 pushDirection = new Vector3(hit.moveDirection.x, 0, hit.moveDirection.z);
-
         rigidbody.velocity = pushDirection * pushForce;
     }
 }

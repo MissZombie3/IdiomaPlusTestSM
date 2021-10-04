@@ -3,8 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private float playerSpeed;
+    [SerializeField] private float gravity = 9.8f;
+    [SerializeField] private float fallVelocity;
+    [SerializeField] private float jumpForce;
+    [SerializeField] private CharacterController player;
+    [SerializeField] private Camera mainCamera;
+    [SerializeField] private Animator playerAnimatorController;
+
     private float horizontalmove;
     private float verticalmove;
     private Vector3 playerInput;
@@ -12,12 +20,6 @@ public class PlayerController : MonoBehaviour
     private Vector3 cameraForward;
     private Vector3 cameraRight;
 
-    public float playerSpeed;
-    public float gravity = 9.8f;
-    public float fallVelocity;
-    public float jumpForce;
-    public CharacterController player;
-    public Camera mainCamera;
 
     private void Start()
     {
@@ -31,27 +33,28 @@ public class PlayerController : MonoBehaviour
 
         playerInput = new Vector3(horizontalmove, 0, verticalmove);
         playerInput = Vector3.ClampMagnitude(playerInput, 1);
+        playerAnimatorController.SetFloat("speedWalk", playerInput.magnitude * playerSpeed);
 
         SetNormalizedCameraDirections();
 
         playerMove = playerInput.x * cameraRight + playerInput.z * cameraForward;
-
         playerMove = playerMove * playerSpeed;
-
         player.transform.LookAt(player.transform.position + playerMove);
         
         SetGravity();
-        SetMovementPlayerSiklls();
+        TrySetJump();
 
         player.Move(playerMove * Time.deltaTime);
+        playerAnimatorController.SetBool("isGrounded", player.isGrounded);
     }
 
-    private void SetMovementPlayerSiklls()
+    private void TrySetJump()
     {
         if (player.isGrounded && Input.GetButtonDown("Jump"))
         {
             fallVelocity = jumpForce;
             playerMove.y = fallVelocity;
+            playerAnimatorController.SetTrigger("jump");
         }
     }
 
@@ -66,6 +69,7 @@ public class PlayerController : MonoBehaviour
         cameraForward = cameraForward.normalized;
         cameraRight = cameraRight.normalized;
     }
+
     private void SetGravity()
     {
         if (player.isGrounded)
@@ -77,8 +81,7 @@ public class PlayerController : MonoBehaviour
         {
             fallVelocity -= gravity * Time.deltaTime;
             playerMove.y = fallVelocity;
+            playerAnimatorController.SetFloat("verticalSpeed", player.velocity.y);
         }
-        
     }
-
 }
