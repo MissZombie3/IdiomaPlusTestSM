@@ -24,32 +24,50 @@ public class EnemyAI : MonoBehaviour
     private int currentPoint;
     private EnemyState currentState = EnemyState.Patrol;
     private Transform playerTransform;
+    private Health playerHealth;
+    private Health myHealth;
 
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerHealth = playerTransform.GetComponent<Health>();
+        myHealth = GetComponent<Health>();
     }
 
     private void Update()
     {
+        if (!playerHealth.IsDead && !myHealth.IsDead)
+        {
+            SetState();
+            agent.isStopped = currentState == EnemyState.Attack;
+        }
+        else
+        {
+            agent.isStopped = false;
+            currentState = EnemyState.Patrol;
+            Patrol();
+        }
+        animator.SetBool("isAttacking", currentState == EnemyState.Attack);
+        animator.SetFloat("Speed", agent.velocity.magnitude);
+    }
+
+    private void SetState()
+    {
         switch (currentState)
         {
-            case EnemyState.Patrol: 
+            case EnemyState.Patrol:
                 Patrol();
                 break;
 
-            case EnemyState.Chase: 
+            case EnemyState.Chase:
                 Chase();
-                break;  
-            
-            case EnemyState.Attack: 
+                break;
+
+            case EnemyState.Attack:
                 Attack();
                 break;
         }
-        agent.isStopped = currentState == EnemyState.Attack;
-        animator.SetBool("isAttacking", currentState == EnemyState.Attack);
-        animator.SetFloat("Speed", agent.velocity.magnitude);
     }
 
     private void Patrol()
@@ -83,11 +101,12 @@ public class EnemyAI : MonoBehaviour
 
     private void Attack()
     {
+        agent.velocity = Vector3.zero;
         var lookPos = playerTransform.position - transform.position;
+        lookPos.y = 0;
 
         if (lookPos.magnitude != 0)
         {
-            lookPos.y = 0;
             var rotation = Quaternion.LookRotation(lookPos);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * damping);
         }

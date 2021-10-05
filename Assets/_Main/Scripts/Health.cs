@@ -26,10 +26,23 @@ public class Health : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        if (damage <= 0)
+            return;
+
         currentHealth -= damage;
         if (!IsDead)
             onTakeDamage?.Invoke();
 
         animator.SetBool("isDead", IsDead);
+    }
+
+    public void Heal(int amount)
+    {
+        if (amount <= 0)
+            return;
+        currentHealth += amount;
+
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
     }
 }

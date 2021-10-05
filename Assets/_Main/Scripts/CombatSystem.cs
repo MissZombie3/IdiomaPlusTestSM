@@ -9,6 +9,7 @@ public class CombatSystem : MonoBehaviour
     [SerializeField] private float attackRate;
     [SerializeField] private float attackRadius;
     [SerializeField] private int attackDamage;
+    [SerializeField] private GameObject weapon;
 
     private Camera mainCamera;
     private float nextAttack = 0;
@@ -16,6 +17,17 @@ public class CombatSystem : MonoBehaviour
     private void Awake()
     {
         mainCamera = Camera.main;
+        enabled = false;
+    }
+
+    private void OnEnable()
+    {
+        weapon.SetActive(true);
+    }
+
+    private void OnDisable()
+    {
+        weapon.SetActive(false);
     }
 
     private void Update()
