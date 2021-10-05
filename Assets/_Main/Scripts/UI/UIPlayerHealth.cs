@@ -11,7 +11,7 @@ public class UIPlayerHealth : MonoBehaviour
     private void Awake()
     {
         myImage = GetComponent<Image>();
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+        playerHealth = FindObjectOfType<PlayerMovement>().GetComponent<Health>();
     }
 
     private void Update()

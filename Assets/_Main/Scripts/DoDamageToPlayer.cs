@@ -10,7 +10,7 @@ public class DoDamageToPlayer : MonoBehaviour
 
     private void Awake()
     {
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+        playerHealth = FindObjectOfType<PlayerMovement>().GetComponent<Health>();
     }
 
     public void ApplyDamage()

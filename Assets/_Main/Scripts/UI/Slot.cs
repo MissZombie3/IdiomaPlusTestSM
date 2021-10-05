@@ -23,7 +23,7 @@ public class Slot : MonoBehaviour
     }
 
     private Image slotIcon;
-    private GameObject player;
+    private PlayerMovement player;
     private CombatSystem combatSystem;
     private Health playerHealth;
     
@@ -31,7 +31,7 @@ public class Slot : MonoBehaviour
     {
         slotIcon = transform.GetChild(0).GetComponent<Image>();
         IsEmpty = true;
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = FindObjectOfType<PlayerMovement>();
         combatSystem = player.GetComponent<CombatSystem>();
         playerHealth = player.GetComponent<Health>();
     }

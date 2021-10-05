@@ -20,12 +20,12 @@ public class UIEndScreen : MonoBehaviour
         {
             enemiesHealths.Add(enemy.GetComponent<Health>());
         }
-        playerHealth = GameObject.FindGameObjectWithTag("Player").GetComponent<Health>();
+        playerHealth = FindObjectOfType<PlayerMovement>().GetComponent<Health>();
     }
 
     private void Update()
     {
-        if (isEnded)
+        if (isEnded || playerHealth == null)
             return;
 
         if (playerHealth.IsDead)

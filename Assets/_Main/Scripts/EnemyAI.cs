@@ -30,7 +30,7 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerTransform = FindObjectOfType<PlayerMovement>().transform;
         playerHealth = playerTransform.GetComponent<Health>();
         myHealth = GetComponent<Health>();
     }
@@ -114,7 +114,6 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(playerTransform.position, transform.position) > stopAttackRange)
             currentState = EnemyState.Chase;
     }
-
 
     private void OnDrawGizmosSelected()
     {
