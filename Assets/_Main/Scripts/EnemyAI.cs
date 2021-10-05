@@ -46,7 +46,7 @@ public class EnemyAI : MonoBehaviour
         {
             agent.isStopped = false;
             currentState = EnemyState.Patrol;
-            Patrol();
+            //Patrol();
         }
         animator.SetBool("isAttacking", currentState == EnemyState.Attack);
         animator.SetFloat("Speed", agent.velocity.magnitude);

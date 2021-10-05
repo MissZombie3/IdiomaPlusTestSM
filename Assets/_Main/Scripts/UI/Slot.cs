@@ -8,8 +8,7 @@ public enum ItemType
 {
     None,
     Sword,
-    Apple,
-    Watermelon
+    Apple
 }
 
 public class Slot : MonoBehaviour
@@ -55,9 +54,6 @@ public class Slot : MonoBehaviour
                 break;
             case ItemType.Apple:
                 playerHealth.Heal(15);
-                break;
-            case ItemType.Watermelon:
-                playerHealth.Heal(55);
                 break;
         }
         RemoveFromInventory();
